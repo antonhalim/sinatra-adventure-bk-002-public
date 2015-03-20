@@ -9,7 +9,11 @@ class RegistrationsController < ApplicationController
   # Use your battle-hardened text editor to create the
   # appropriate route, look at the request, and then
   # direct them to the new user page via the /new route.
-
+  post '/register' do
+    session[:email] = params["email"]
+    # erb :new_user
+    redirect '/new'
+  end
   # TODO: Create a route that handles a POST HTTP request from the
   # registration form, then see what /new has to say.
 
@@ -25,12 +29,18 @@ class RegistrationsController < ApplicationController
     # the maze you are constructing. You will need to implement
     # the code to allow them to pass this challenge when
     # they have registered
+    if user_registered?
+      erb :new
+    else
+      @error = "PLEASE REGISTER"
+      erb :register
+    end
 
 
     # You will need to send properly registered people to me
     # and render a template that will tell them they
     # have completed their quest
-
+    erb :new
     # TODO: render the new user template and see what it says.
   end
   # Bonus experience! The throw above makes an ugly error page happen.
@@ -41,7 +51,8 @@ class RegistrationsController < ApplicationController
   def user_registered?
     # TODO: you'll need a way for your registration to set a value that
     # will make this true when your /new looks at it.
-    false
+    return false if session[:email].empty?
+    true
   end
 
 end
